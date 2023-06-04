@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,16 +23,60 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.az.f1graphics.R
 
+
+data class PitLaneUIData(
+    val teamLogo: Int,
+    val teamColor: Color,
+    val driverPosition: Int,
+    val driverName: String,
+    val pitLaneTime: Float,
+    val teamPitTime: Float
+)
+
+private val mockPitLaneUIData = listOf(
+    PitLaneUIData(
+        R.drawable.account_circle,
+        Color.White.copy(red = 0.1f, alpha = 0.8f),
+        1,
+        "HAMILTON",
+        16.7f,
+        2.7f
+    ),
+    PitLaneUIData(
+        R.drawable.account_circle,
+        Color.Blue.copy(alpha = 0.8f),
+        14,
+        "VERSTAPPEN",
+        10.7f,
+        3.7f
+    )
+)
+
+@Composable
+@Preview
+fun PitLaneList(
+    modifier: Modifier = Modifier,
+    pitLaneStateList: List<PitLaneUIData> = mockPitLaneUIData
+) {
+    LazyColumn(content = {
+        items(pitLaneStateList.size) {
+            PitLaneCard(data = pitLaneStateList[it])
+        }
+    })
+}
+
 @Composable
 @Preview
 fun PitLaneCard(
     modifier: Modifier = Modifier,
-    driverPosition: Int = 1,
-    driverTeamLogo: Int = R.drawable.account_circle,
-    driverTeamColor: Color = Color.White.copy(red = 0.1f, alpha = 0.8f),
-    driverName: String = "HAMILTON",
-    totalTimeInPitLane: Float = 16.7f,
-    timeInTeamPit: Float = 2.7f
+    data: PitLaneUIData = PitLaneUIData(
+        R.drawable.account_circle,
+        Color.White.copy(red = 0.1f, alpha = 0.8f),
+        1,
+        "HAMILTON",
+        16.7f,
+        2.7f
+    )
 ) {
 
     Column(
@@ -43,33 +89,33 @@ fun PitLaneCard(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .background(Color.White.copy(alpha = 0.9f))
-                .wrapContentWidth()
+                .fillMaxWidth(0.65f)
         ) {
             Text(
-                text = "$driverPosition",
+                text = "${data.driverPosition}",
                 style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic)
             )
 
             Box(
                 modifier = Modifier
                     .size(16.dp)
-                    .background(driverTeamColor)
+                    .background(data.teamColor)
             ) {
                 Image(
-                    painter = painterResource(id = driverTeamLogo),
+                    painter = painterResource(id = data.teamLogo),
                     contentDescription = null
                 )
             }
 
             Text(
-                text = driverName,
+                text = data.driverName,
                 style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic)
             )
         }
 
 
         Row(
-            modifier = Modifier.wrapContentWidth(),
+            modifier = Modifier.fillMaxWidth(0.6f),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -84,7 +130,7 @@ fun PitLaneCard(
                 )
 
                 Text(
-                    text = "$totalTimeInPitLane",
+                    text = "${data.pitLaneTime}",
                     style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
                     color = Color.White,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -92,9 +138,9 @@ fun PitLaneCard(
             }
 
             Text(
-                text = "$timeInTeamPit",
+                text = "${data.teamPitTime}",
                 style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
-                color = driverTeamColor,
+                color = data.teamColor,
                 modifier = Modifier.size(39.dp)
             )
         }
