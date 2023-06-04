@@ -56,11 +56,12 @@ private val mockPitLaneUIData = listOf(
 @Composable
 @Preview
 fun PitLaneList(
+    modifier: Modifier = Modifier,
     pitLaneStateList: List<PitLaneUIData> = mockPitLaneUIData
 ) {
     LazyColumn(content = {
         items(pitLaneStateList.size) {
-            PitLaneCard(data = pitLaneStateList[it])
+            PitLaneCard(modifier = modifier, data = pitLaneStateList[it])
         }
     })
 }
@@ -142,7 +143,8 @@ fun PitLaneCard(
                     text = "${data.stopTime}",
                     style = MaterialTheme.typography.headlineLarge.copy(fontStyle = FontStyle.Italic),
                     color = data.teamColor,
-                    fontFamily = f1Regular
+                    fontFamily = f1Regular,
+                    modifier = Modifier.padding(end = 8.dp)
                 )
             } else {
                 Column(
