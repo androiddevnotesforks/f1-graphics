@@ -30,7 +30,7 @@ data class PitLaneUIData(
     val driverPosition: Int,
     val driverName: String,
     val pitLaneTime: Float,
-    val teamPitTime: Float
+    val stopTime: Float? = null
 )
 
 private val mockPitLaneUIData = listOf(
@@ -47,8 +47,7 @@ private val mockPitLaneUIData = listOf(
         Color.Blue.copy(alpha = 0.8f),
         14,
         "VERSTAPPEN",
-        10.7f,
-        3.7f
+        10.7f
     )
 )
 
@@ -127,30 +126,40 @@ fun PitLaneCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = Modifier.padding(8.dp)
-            ) {
+            if (data.stopTime != null) {
+
                 Text(
-                    text = "PIT",
+                    text = "STOP\nTIME",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier.padding(8.dp)
                 )
 
                 Text(
-                    text = "${data.pitLaneTime}",
-                    style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
-                    color = Color.White,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    text = "${data.stopTime}",
+                    style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
+                    color = data.teamColor,
+                    modifier = Modifier.size(39.dp)
                 )
-            }
+            } else {
+                Column(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = "PIT",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
 
-            Text(
-                text = "${data.teamPitTime}",
-                style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
-                color = data.teamColor,
-                modifier = Modifier.size(39.dp)
-            )
+                    Text(
+                        text = "${data.pitLaneTime}",
+                        style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+            }
         }
     }
 
