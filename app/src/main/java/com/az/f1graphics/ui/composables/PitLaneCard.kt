@@ -48,7 +48,7 @@ private val mockPitLaneUIData = listOf(
         R.drawable.account_circle,
         Color.Blue.copy(alpha = 0.8f),
         14,
-        "VERSTAPPEN",
+        "OCON",
         10.7f
     )
 )
@@ -130,7 +130,6 @@ fun PitLaneCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (data.stopTime != null) {
-
                 Text(
                     text = "STOP\nTIME",
                     style = MaterialTheme.typography.bodySmall,
@@ -141,10 +140,9 @@ fun PitLaneCard(
 
                 Text(
                     text = "${data.stopTime}",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
+                    style = MaterialTheme.typography.headlineLarge.copy(fontStyle = FontStyle.Italic),
                     color = data.teamColor,
-                    modifier = Modifier.size(40.dp),
-                    fontFamily = f1Bold
+                    fontFamily = f1Regular
                 )
             } else {
                 Column(
