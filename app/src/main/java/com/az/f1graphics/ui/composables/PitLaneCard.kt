@@ -22,6 +22,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.az.f1graphics.R
+import com.az.f1graphics.ui.fonts.f1Bold
+import com.az.f1graphics.ui.fonts.f1Regular
 
 
 data class PitLaneUIData(
@@ -52,9 +54,8 @@ private val mockPitLaneUIData = listOf(
 )
 
 @Composable
-@Preview(device = "spec:width=411dp,height=891dp")
+@Preview
 fun PitLaneList(
-    modifier: Modifier = Modifier,
     pitLaneStateList: List<PitLaneUIData> = mockPitLaneUIData
 ) {
     LazyColumn(content = {
@@ -81,7 +82,7 @@ fun PitLaneCard(
     Column(
         modifier = modifier
             .background(Color.Black)
-            .width(150.dp)
+            .width(170.dp)
     ) {
 
         Row(
@@ -96,7 +97,8 @@ fun PitLaneCard(
             Text(
                 text = "${data.driverPosition}",
                 style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
-                modifier = Modifier.padding(start = paddingValue, end = paddingValue)
+                modifier = Modifier.padding(start = paddingValue, end = paddingValue),
+                fontFamily = f1Regular
             )
 
             Box(
@@ -114,6 +116,7 @@ fun PitLaneCard(
                 text = data.driverName,
                 style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
                 modifier = Modifier.padding(start = 4.dp, end = 4.dp),
+                fontFamily = f1Bold
             )
         }
 
@@ -132,14 +135,16 @@ fun PitLaneCard(
                     text = "STOP\nTIME",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.White,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
+                    fontFamily = f1Bold
                 )
 
                 Text(
                     text = "${data.stopTime}",
                     style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
                     color = data.teamColor,
-                    modifier = Modifier.size(39.dp)
+                    modifier = Modifier.size(40.dp),
+                    fontFamily = f1Bold
                 )
             } else {
                 Column(
@@ -149,14 +154,16 @@ fun PitLaneCard(
                         text = "PIT",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        fontFamily = f1Regular
                     )
 
                     Text(
                         text = "${data.pitLaneTime}",
                         style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
                         color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        fontFamily = f1Bold
                     )
                 }
             }

@@ -1,18 +1,9 @@
 package com.az.f1graphics.ui.fonts
 
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.googlefonts.GoogleFont
 import com.az.f1graphics.R
 
-val provider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
+val f1Regular = FontFamily(Font(R.font.f1_regular_font))
 
-val fontName = GoogleFont("Lobster Two")
-
-val fontFamily = FontFamily(
-    Font(googleFont = fontName, fontProvider = provider)
-)
+val f1Bold = FontFamily(Font(R.font.f1_bold_font))
