@@ -41,7 +41,6 @@ proguard/
 *.log
 
 # Android Studio project metadata folder
-*.iml
 *.iws
 *.ipr
 *.ids
