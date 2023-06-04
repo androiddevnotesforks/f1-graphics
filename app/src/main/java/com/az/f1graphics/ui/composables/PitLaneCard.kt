@@ -38,12 +38,6 @@ fun PitLaneCard(
             .background(Color.Black)
             .wrapContentWidth()
     ) {
-        Text(
-            text = "PIT LANE",
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.Red.copy(red = 0.8f),
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
 
         Row(
             modifier = Modifier
