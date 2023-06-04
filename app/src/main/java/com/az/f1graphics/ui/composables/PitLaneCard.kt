@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,7 +53,7 @@ private val mockPitLaneUIData = listOf(
 )
 
 @Composable
-@Preview
+@Preview(device = "spec:width=411dp,height=891dp")
 fun PitLaneList(
     modifier: Modifier = Modifier,
     pitLaneStateList: List<PitLaneUIData> = mockPitLaneUIData
@@ -82,18 +82,22 @@ fun PitLaneCard(
     Column(
         modifier = modifier
             .background(Color.Black)
-            .wrapContentWidth()
+            .width(150.dp)
     ) {
 
         Row(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .background(Color.White.copy(alpha = 0.9f))
-                .fillMaxWidth(0.65f)
+                .fillMaxWidth()
         ) {
+
+            val paddingValue = if (data.driverPosition > 9) 4.dp else 8.dp
+
             Text(
                 text = "${data.driverPosition}",
-                style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic)
+                style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                modifier = Modifier.padding(start = paddingValue, end = paddingValue)
             )
 
             Box(
@@ -109,14 +113,18 @@ fun PitLaneCard(
 
             Text(
                 text = data.driverName,
-                style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic)
+                style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                modifier = Modifier.padding(start = 4.dp, end = 4.dp),
             )
         }
 
 
         Row(
-            modifier = Modifier.fillMaxWidth(0.6f),
-            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(start = 8.dp, end = 8.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
