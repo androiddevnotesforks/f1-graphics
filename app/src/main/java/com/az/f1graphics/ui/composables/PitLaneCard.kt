@@ -16,9 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.az.f1graphics.R
@@ -43,34 +45,50 @@ private val mockPitLaneUIData = listOf(
         "HAMILTON",
         16.7f,
         2.7f
-    ),
-    PitLaneUIData(
-        R.drawable.account_circle,
-        Color.Blue.copy(alpha = 0.8f),
-        14,
-        "OCON",
-        10.7f
+    ), PitLaneUIData(
+        R.drawable.account_circle, Color.Blue.copy(alpha = 0.8f), 14, "OCON", 10.7f
     )
 )
+
+private val widgetWidth = 170.dp
 
 @Composable
 @Preview
 fun PitLaneList(
-    modifier: Modifier = Modifier,
-    pitLaneStateList: List<PitLaneUIData> = mockPitLaneUIData
+    modifier: Modifier = Modifier, pitLaneStateList: List<PitLaneUIData> = mockPitLaneUIData
 ) {
-    LazyColumn(content = {
-        items(pitLaneStateList.size) {
-            PitLaneCard(modifier = modifier, data = pitLaneStateList[it])
-        }
-    })
+
+    Column {
+        Text(
+            text = "PIT LANE",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = modifier
+                .width(widgetWidth)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Black.copy(alpha = 0.4f), Color.Black.copy(alpha = 0.9f)
+                        )
+                    )
+                ),
+            textAlign = TextAlign.Center,
+            color = Color.Red.copy(alpha = 0.7f),
+            fontFamily = f1Bold
+        )
+
+        LazyColumn(content = {
+            items(pitLaneStateList.size) {
+                PitLaneCard(modifier = modifier, data = pitLaneStateList[it])
+            }
+        })
+    }
+
 }
 
 @Composable
 @Preview
 fun PitLaneCard(
-    modifier: Modifier = Modifier,
-    data: PitLaneUIData = PitLaneUIData(
+    modifier: Modifier = Modifier, data: PitLaneUIData = PitLaneUIData(
         R.drawable.account_circle,
         Color.White.copy(red = 0.1f, alpha = 0.8f),
         1,
@@ -82,8 +100,14 @@ fun PitLaneCard(
 
     Column(
         modifier = modifier
-            .background(Color.Black)
-            .width(170.dp)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black.copy(alpha = 0.1f), Color.Black.copy(alpha = 0.9f)
+                    )
+                )
+            )
+            .width(widgetWidth)
     ) {
 
         Row(
@@ -108,8 +132,7 @@ fun PitLaneCard(
                     .background(data.teamColor)
             ) {
                 Image(
-                    painter = painterResource(id = data.teamLogo),
-                    contentDescription = null
+                    painter = painterResource(id = data.teamLogo), contentDescription = null
                 )
             }
 
