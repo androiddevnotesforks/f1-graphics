@@ -11,9 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,6 +34,7 @@ import com.az.f1graphics.ui.fonts.f1Bold
 import com.az.f1graphics.ui.fonts.f1Regular
 import com.az.f1graphics.ui.theme.AlpineBlue
 import com.az.f1graphics.ui.theme.MercedesTeal
+import kotlinx.coroutines.delay
 
 
 data class PitLaneUIData(
@@ -200,4 +207,47 @@ fun PitLaneCard(
         }
     }
 
+}
+
+@Composable
+fun Stopwatch() {
+    var isRunning by remember { mutableStateOf(false) }
+    var startTime by remember { mutableStateOf(0L) }
+    var elapsedMillis by remember { mutableStateOf(0L) }
+
+    LaunchedEffect(isRunning) {
+        while (isRunning) {
+            delay(10)
+            elapsedMillis = System.currentTimeMillis() - startTime
+        }
+    }
+
+    Button(
+        onClick = {
+            if (isRunning) {
+                elapsedMillis = System.currentTimeMillis() - startTime
+                isRunning = false
+            } else {
+                startTime = System.currentTimeMillis() - elapsedMillis
+                isRunning = true
+            }
+        },
+        modifier = Modifier.padding(top = 16.dp)
+    ) {
+        if (isRunning) {
+            Text(text = "Stop")
+        } else {
+            Text(text = "Start")
+        }
+    }
+
+    Text(
+        text = String.format(
+            "%02d:%03d",
+            elapsedMillis / 1000,
+            elapsedMillis % 1000
+        ),
+        style = MaterialTheme.typography.headlineSmall,
+        modifier = Modifier.padding(top = 16.dp)
+    )
 }
