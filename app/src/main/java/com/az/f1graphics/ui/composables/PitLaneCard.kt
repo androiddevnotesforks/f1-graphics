@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import com.az.f1graphics.R
 import com.az.f1graphics.ui.fonts.f1Bold
 import com.az.f1graphics.ui.fonts.f1Regular
+import com.az.f1graphics.ui.theme.AlpineBlue
+import com.az.f1graphics.ui.theme.MercedesTeal
 
 
 data class PitLaneUIData(
@@ -40,13 +42,17 @@ data class PitLaneUIData(
 private val mockPitLaneUIData = listOf(
     PitLaneUIData(
         R.drawable.account_circle,
-        Color.White.copy(red = 0.1f, alpha = 0.8f),
+        MercedesTeal,
         1,
         "HAMILTON",
         16.7f,
         2.7f
     ), PitLaneUIData(
-        R.drawable.account_circle, Color.Blue.copy(alpha = 0.8f), 14, "OCON", 10.7f
+        R.drawable.account_circle,
+        AlpineBlue,
+        14,
+        "OCON",
+        10.7f
     )
 )
 
@@ -132,7 +138,8 @@ fun PitLaneCard(
                     .background(data.teamColor)
             ) {
                 Image(
-                    painter = painterResource(id = data.teamLogo), contentDescription = null
+                    painter = painterResource(id = data.teamLogo),
+                    contentDescription = null
                 )
             }
 
