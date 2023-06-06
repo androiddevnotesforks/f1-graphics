@@ -2,6 +2,7 @@ package com.az.f1graphics.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +35,9 @@ import com.az.f1graphics.ui.fonts.f1Regular
 import com.az.f1graphics.ui.theme.AlpineBlue
 import com.az.f1graphics.ui.theme.MercedesTeal
 import kotlinx.coroutines.delay
+import java.math.BigDecimal
+import java.math.RoundingMode
+import kotlin.random.Random
 
 
 data class PitLaneUIData(
@@ -43,7 +46,7 @@ data class PitLaneUIData(
     val driverPosition: Int,
     val driverName: String,
     val pitLaneTime: Float,
-    val stopTime: Float? = null
+    var stopTime: Float? = null
 )
 
 private val mockPitLaneUIData = listOf(
@@ -80,7 +83,7 @@ fun PitLaneList(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Black.copy(alpha = 0.4f), Color.Black.copy(alpha = 0.9f)
+                            Color.Black.copy(alpha = 0.7f), Color.Black.copy(alpha = 0.9f)
                         )
                     )
                 ),
@@ -116,7 +119,7 @@ fun PitLaneCard(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.Black.copy(alpha = 0.1f), Color.Black.copy(alpha = 0.9f)
+                        Color.Black.copy(alpha = 0.7f), Color.Black.copy(alpha = 0.9f)
                     )
                 )
             )
@@ -168,6 +171,7 @@ fun PitLaneCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (data.stopTime != null) {
+
                 Text(
                     text = "STOP\nTIME",
                     style = MaterialTheme.typography.bodySmall,
@@ -184,24 +188,56 @@ fun PitLaneCard(
                     modifier = Modifier.padding(end = 8.dp)
                 )
             } else {
+                var isRunning by remember { mutableStateOf(false) }
+                var startTime by remember { mutableStateOf(0L) }
+                var elapsedMillis by remember { mutableStateOf(0L) }
+
+                LaunchedEffect(isRunning) {
+                    while (isRunning) {
+                        delay(5)
+                        elapsedMillis = System.currentTimeMillis() - startTime
+                    }
+                }
+
                 Column(
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clickable {
+                            if (isRunning) {
+                                elapsedMillis = System.currentTimeMillis() - startTime
+                                isRunning = false
+                            } else {
+                                startTime = System.currentTimeMillis() - elapsedMillis
+                                isRunning = true
+                            }
+                        }
                 ) {
                     Text(
                         text = "PIT",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(start = 6.dp, end = 6.dp),
                         fontFamily = f1Regular
                     )
 
+                    val seconds = (elapsedMillis / 1000) % 60
+                    val hundreds = ((elapsedMillis / 10) % 100) / 10
+
+                    val startPadding = if (seconds < 10) 6.dp else 3.dp
+
                     Text(
-                        text = "${data.pitLaneTime}",
+                        text = "$seconds:${hundreds}",
                         style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
                         color = Color.White,
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(start = startPadding, end = 3.dp),
                         fontFamily = f1Bold
                     )
+
+                    FakePitStop(seconds, data)
                 }
             }
         }
@@ -210,44 +246,10 @@ fun PitLaneCard(
 }
 
 @Composable
-fun Stopwatch() {
-    var isRunning by remember { mutableStateOf(false) }
-    var startTime by remember { mutableStateOf(0L) }
-    var elapsedMillis by remember { mutableStateOf(0L) }
-
-    LaunchedEffect(isRunning) {
-        while (isRunning) {
-            delay(10)
-            elapsedMillis = System.currentTimeMillis() - startTime
-        }
+private fun FakePitStop(seconds: Long, data: PitLaneUIData) {
+    if (seconds > 4) {
+        val random = Random.nextFloat() * (4.0f - 2.0f) + 2.0f
+        val rounded = BigDecimal(random.toDouble()).setScale(1, RoundingMode.HALF_UP).toFloat()
+        data.stopTime = rounded
     }
-
-    Button(
-        onClick = {
-            if (isRunning) {
-                elapsedMillis = System.currentTimeMillis() - startTime
-                isRunning = false
-            } else {
-                startTime = System.currentTimeMillis() - elapsedMillis
-                isRunning = true
-            }
-        },
-        modifier = Modifier.padding(top = 16.dp)
-    ) {
-        if (isRunning) {
-            Text(text = "Stop")
-        } else {
-            Text(text = "Start")
-        }
-    }
-
-    Text(
-        text = String.format(
-            "%02d:%03d",
-            elapsedMillis / 1000,
-            elapsedMillis % 1000
-        ),
-        style = MaterialTheme.typography.headlineSmall,
-        modifier = Modifier.padding(top = 16.dp)
-    )
 }
