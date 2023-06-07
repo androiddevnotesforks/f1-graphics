@@ -2,4 +2,4 @@
 F1 Broadcast Graphics made with Compose
 
 # Pit Lane Card View
-![Video](https://raw.githubusercontent.com/zurche/f1-graphics/main/img/recording.webm)
+[recording.webm](https://github.com/zurche/f1-graphics/assets/15671525/503f7dd8-16a5-4347-a17c-b710f01b637a)
