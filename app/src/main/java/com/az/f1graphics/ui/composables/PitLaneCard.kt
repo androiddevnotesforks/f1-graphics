@@ -1,5 +1,6 @@
 package com.az.f1graphics.ui.composables
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,14 +56,20 @@ private val mockPitLaneUIData = listOf(
         MercedesTeal,
         1,
         "HAMILTON",
-        16.7f,
-        2.7f
+        16.7f
     ), PitLaneUIData(
         R.drawable.rb_logo,
         RedBullBlue,
         14,
         "PEREZ",
         10.7f
+    ),
+    PitLaneUIData(
+        R.drawable.mercedes_logo,
+        MercedesTeal,
+        5,
+        "RUSSELL",
+        16.7f
     )
 )
 
@@ -109,8 +116,7 @@ fun PitLaneCard(
         MercedesTeal,
         1,
         "HAMILTON",
-        16.7f,
-        2.7f
+        16.7f
     )
 ) {
 
@@ -170,24 +176,14 @@ fun PitLaneCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (data.stopTime != null) {
 
-                Text(
-                    text = "STOP\nTIME",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White,
-                    modifier = Modifier.padding(8.dp),
-                    fontFamily = f1Bold
-                )
+            var displayPitStopTime by remember { mutableStateOf(false) }
 
-                Text(
-                    text = "${data.stopTime}",
-                    style = MaterialTheme.typography.headlineLarge.copy(fontStyle = FontStyle.Italic),
-                    color = data.teamColor,
-                    fontFamily = f1Regular,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            } else {
+            AnimatedVisibility(visible = displayPitStopTime) {
+                PitStopTimeUI(data.stopTime, data.teamColor)
+            }
+
+            if (!displayPitStopTime) {
                 var isRunning by remember { mutableStateOf(false) }
                 var startTime by remember { mutableStateOf(0L) }
                 var elapsedMillis by remember { mutableStateOf(0L) }
@@ -237,7 +233,15 @@ fun PitLaneCard(
                         fontFamily = f1Bold
                     )
 
-                    FakePitStop(seconds, data)
+                    if (seconds > 8) {
+                        val random = Random.nextFloat() * (4.0f - 2.0f) + 2.0f
+                        val rounded =
+                            BigDecimal(random.toDouble()).setScale(1, RoundingMode.HALF_UP)
+                                .toFloat()
+                        data.stopTime = rounded
+                        displayPitStopTime = true
+                    }
+
                 }
             }
         }
@@ -246,10 +250,29 @@ fun PitLaneCard(
 }
 
 @Composable
-private fun FakePitStop(seconds: Long, data: PitLaneUIData) {
-    if (seconds > 4) {
-        val random = Random.nextFloat() * (4.0f - 2.0f) + 2.0f
-        val rounded = BigDecimal(random.toDouble()).setScale(1, RoundingMode.HALF_UP).toFloat()
-        data.stopTime = rounded
+@Preview
+private fun PitStopTimeUI(stopTime: Float? = 2.4f, teamColor: Color = MercedesTeal) {
+    Row(
+        modifier = Modifier
+            .padding(start = 8.dp, end = 8.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "STOP\nTIME",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.White,
+            modifier = Modifier.padding(8.dp),
+            fontFamily = f1Bold
+        )
+
+        Text(
+            text = "$stopTime",
+            style = MaterialTheme.typography.headlineLarge.copy(fontStyle = FontStyle.Italic),
+            color = teamColor,
+            fontFamily = f1Regular,
+            modifier = Modifier.padding(end = 8.dp)
+        )
     }
 }
