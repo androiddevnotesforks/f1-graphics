@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import com.az.f1graphics.R
 import com.az.f1graphics.ui.fonts.f1Bold
 import com.az.f1graphics.ui.fonts.f1Regular
-import com.az.f1graphics.ui.theme.AlpineBlue
 import com.az.f1graphics.ui.theme.MercedesTeal
+import com.az.f1graphics.ui.theme.RedBullBlue
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -51,17 +51,17 @@ data class PitLaneUIData(
 
 private val mockPitLaneUIData = listOf(
     PitLaneUIData(
-        R.drawable.account_circle,
+        R.drawable.mercedes_logo,
         MercedesTeal,
         1,
         "HAMILTON",
         16.7f,
         2.7f
     ), PitLaneUIData(
-        R.drawable.account_circle,
-        AlpineBlue,
+        R.drawable.rb_logo,
+        RedBullBlue,
         14,
-        "OCON",
+        "PEREZ",
         10.7f
     )
 )
@@ -105,8 +105,8 @@ fun PitLaneList(
 @Preview
 fun PitLaneCard(
     modifier: Modifier = Modifier, data: PitLaneUIData = PitLaneUIData(
-        R.drawable.account_circle,
-        Color.White.copy(red = 0.1f, alpha = 0.8f),
+        R.drawable.mercedes_logo,
+        MercedesTeal,
         1,
         "HAMILTON",
         16.7f,
@@ -149,7 +149,7 @@ fun PitLaneCard(
             ) {
                 Image(
                     painter = painterResource(id = data.teamLogo),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
 
